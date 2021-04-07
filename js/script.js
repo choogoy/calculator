@@ -6,7 +6,7 @@ const income = 50000, // дополнительный доходод
     mission = 300000, // сумма, которую надо накопить 
     expenses = [];
 
-let money, expenses1, expenses2;
+let money;
 
 const isNumber = function(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
