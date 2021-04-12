@@ -7,13 +7,13 @@ const depositCheck = document.querySelector('#deposit-check'); // Чекбокс
 const additionalIncomeItem = document.querySelectorAll('.additional_income-item'); // Поля для ввода возможных доходов (additional_income-item) при помощи querySelectorAll
 
 // Каждый элемент в правой части программы через класс(не через querySelector), которые имеют в имени класса "-value", начиная с class="budget_day-value" и заканчивая class="target_month-value">
-const budgetMonthValue = document.getElementsByClassName('budget_month-value');
-const budgetDayValue = document.getElementsByClassName('budget_day-value');
-const expensesMonthValue = document.getElementsByClassName('expenses_month-value');
-const additionalIncomeValue = document.getElementsByClassName('additional_income-value');
-const additionalExpensesValue = document.getElementsByClassName('additional_expenses-value');
-const incomePeriodValue = document.getElementsByClassName('income_period-value');
-const targetMonthValue = document.getElementsByClassName('target_month-value');
+const budgetMonthValue = document.getElementsByClassName('result-total')[0];
+const budgetDayValue = document.getElementsByClassName('result-total')[1];
+const expensesMonthValue = document.getElementsByClassName('result-total')[2];
+const additionalIncomeValue = document.getElementsByClassName('result-total')[3];
+const additionalExpensesValue = document.getElementsByClassName('result-total')[4];
+const incomePeriodValue = document.getElementsByClassName('result-total')[5];
+const targetMonthValue = document.getElementsByClassName('result-total')[6];
 
 // Оставшиеся поля через querySelector каждый в отдельную переменную: поля ввода (input) с левой стороны и не забудьте про range.
 const salaryAmount = document.querySelector('.salary-amount');
@@ -37,7 +37,7 @@ const start = function() {
     } while (!isNumber(money));
 };
 
-start();
+// start();
 
 const appData = {
     budget: +money,
@@ -122,9 +122,9 @@ const appData = {
     },
 };
 
-appData.asking();
-appData.getExpensesMonth();
-appData.getBudget();
+// appData.asking();
+// appData.getExpensesMonth();
+// appData.getBudget();
 
 if (appData.getTargetMonth() > 0) {
     console.log (`Цель будет достигнута за ${appData.getTargetMonth()} месяцев(-а)`);
@@ -137,10 +137,10 @@ console.log(appData.getStatusIncome()); // уровень дохода
 
 console.log('Наша программа включает в себя данные: ');
 
-for (let key in appData) {
-    console.log('свойство: ' + key);
-    console.log('значение: ' + appData[key]);
-}
+// for (let key in appData) {
+//     console.log('свойство: ' + key);
+//     console.log('значение: ' + appData[key]);
+// }
 
 appData.getInfoDeposit();
 console.log(appData.calcSaveMoney());
