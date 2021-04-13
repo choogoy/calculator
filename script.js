@@ -14,18 +14,13 @@ const endings = {
 const dateLong = document.createElement('div');
 const date = document.createElement('div');
 
-dateLong.setAttribute('data', 'длинная дата');
-date.setAttribute('data', 'короткая дата');
-
-//добавляем 2 созданных элемента на страницу
-document.body.append(dateLong);
-document.body.append(date);
-
+// 2) Для вывода в формате (а) напишите функцию, которая будет менять склонение слов в зависимости от числа, "час, часов, часа"
 // функция изменяет окончание слова в зависимости от числа
 const ending = function(num, arr) {
   return arr[(num % 100 > 4 && num % 100 < 20) ? 2 : [2, 0, 1, 1, 1, 2][(num % 10 < 5) ? num % 10 : 5]];
 };
 
+// 3) Для вывода в формате (б) напишите функцию, которая будет добавлять 0 перед значениями которые состоят из одной цифры (из 9:5:3  1.6.2019 сделает 09:05:03 01.06.2019)
 // функция добавляет "0" если число меньше 10
 const addZero = function(num) {
   if (num < 10) {
@@ -35,25 +30,56 @@ const addZero = function(num) {
   }
 };
 
+// добавляем атрибут data элементам
+dateLong.setAttribute('data', 'длинная дата');
+date.setAttribute('data', 'короткая дата');
+
+//добавляем 2 созданных элемента на страницу
+document.body.append(dateLong);
+document.body.append(date);
+
 // функция выводит на страницу текущую дату и время в двух форматах
 const timer = function() {
-  const currentDate = new Date();
-  let timerStr = '';
-  let timerStrLong = '';
+// 1) Выведите на страницу текущую дату и время в 2-х форматах: 
+// a) 'Сегодня Вторник, 4 февраля 2020 года, 21 час 5 минут 33 секунды'  
+// б) '04.02.2020 - 21:05:33'
+let currentDate = new Date();
+dateLong.innerHTML = `а) Сегодня ${week[currentDate.getDay()]}, ${currentDate.getDate()} ${month[currentDate.getMonth()]} ${currentDate.getUTCFullYear()} года,
+                        ${currentDate.getHours()} ${ending(currentDate.getHours(), endings.hours)}
+                        ${currentDate.getMinutes()} ${ending((currentDate.getMinutes()), endings.minutes)}
+                        ${currentDate.getSeconds()} ${ending(currentDate.getSeconds(), endings.seconds)}`;
 
-  // формируем строку с развернутой датой
-  timerStrLong = `а) Сегодня ${week[currentDate.getDay()]}, ${currentDate.getDate()} ${month[currentDate.getMonth()]} ${currentDate.getUTCFullYear()} года,
-    ${currentDate.getHours()} ${ending(currentDate.getHours(), endings.hours)}
-    ${currentDate.getMinutes()} ${ending(currentDate.getMinutes(), endings.minutes)}
-    ${currentDate.getSeconds()} ${ending(currentDate.getSeconds(), endings.seconds)}`;
-  
-  // формируем строку с короткой датой
-  timerStr = `б) ${addZero(currentDate.getDate())}.${addZero(currentDate.getMonth()+1)}.${currentDate.getUTCFullYear()} -
-    ${addZero(currentDate.getHours())}:${addZero(currentDate.getMinutes())}:${addZero(currentDate.getSeconds())}`;
-  
-  dateLong.innerHTML = timerStrLong;
-  date.innerHTML = timerStr;
+date.innerHTML =    `б) ${addZero(currentDate.getDate())}.${addZero(currentDate.getMonth()+1)}.${currentDate.getUTCFullYear()} -
+                        ${addZero(currentDate.getHours())}:${addZero(currentDate.getMinutes())}:${addZero(currentDate.getSeconds())}`;
 };
 
-// запускаем таймер
+timer();
+//запускаем таймер
 setInterval(timer, 1000);
+
+
+
+
+
+
+
+
+// 4) С помощью функции setInterval, реализуйте обновление даты и времени каждую секунду 
+
+
+
+
+
+
+
+
+
+
+
+
+
+// function time() {
+//   document.body.textContent = new Date();
+// }
+
+// setInterval(time, 1000);
