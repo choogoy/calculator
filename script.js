@@ -38,48 +38,24 @@ date.setAttribute('data', 'короткая дата');
 document.body.append(dateLong);
 document.body.append(date);
 
-// функция выводит на страницу текущую дату и время в двух форматах
-const timer = function() {
 // 1) Выведите на страницу текущую дату и время в 2-х форматах: 
 // a) 'Сегодня Вторник, 4 февраля 2020 года, 21 час 5 минут 33 секунды'  
 // б) '04.02.2020 - 21:05:33'
-let currentDate = new Date();
-dateLong.innerHTML = `а) Сегодня ${week[currentDate.getDay()]}, ${currentDate.getDate()} ${month[currentDate.getMonth()]} ${currentDate.getUTCFullYear()} года,
-                        ${currentDate.getHours()} ${ending(currentDate.getHours(), endings.hours)}
-                        ${currentDate.getMinutes()} ${ending((currentDate.getMinutes()), endings.minutes)}
-                        ${currentDate.getSeconds()} ${ending(currentDate.getSeconds(), endings.seconds)}`;
 
-date.innerHTML =    `б) ${addZero(currentDate.getDate())}.${addZero(currentDate.getMonth()+1)}.${currentDate.getUTCFullYear()} -
-                        ${addZero(currentDate.getHours())}:${addZero(currentDate.getMinutes())}:${addZero(currentDate.getSeconds())}`;
+// функция выводит на страницу текущую дату и время в двух форматах
+const timer = function() {
+  let currentDate = new Date();
+  dateLong.innerHTML = `а) Сегодня ${week[currentDate.getDay()]}, ${currentDate.getDate()} ${month[currentDate.getMonth()]} ${currentDate.getUTCFullYear()} года,
+                          ${currentDate.getHours()} ${ending(currentDate.getHours(), endings.hours)}
+                          ${currentDate.getMinutes()} ${ending((currentDate.getMinutes()), endings.minutes)}
+                          ${currentDate.getSeconds()} ${ending(currentDate.getSeconds(), endings.seconds)}`;
+
+  date.innerHTML =    `б) ${addZero(currentDate.getDate())}.${addZero(currentDate.getMonth()+1)}.${currentDate.getUTCFullYear()} -
+                          ${addZero(currentDate.getHours())}:${addZero(currentDate.getMinutes())}:${addZero(currentDate.getSeconds())}`;
 };
 
 timer();
-//запускаем таймер
-setInterval(timer, 1000);
-
-
-
-
-
-
-
 
 // 4) С помощью функции setInterval, реализуйте обновление даты и времени каждую секунду 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// function time() {
-//   document.body.textContent = new Date();
-// }
-
-// setInterval(time, 1000);
+//запускаем таймер
+setInterval(timer, 1000);
