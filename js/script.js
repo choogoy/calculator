@@ -34,9 +34,6 @@ const checkInput = function() {
     const summInputs = document.querySelectorAll('input[placeholder="Сумма"]');
     const nameInputs = document.querySelectorAll('input[placeholder="Наименование"]');
 
-    console.log(summInputs);
-    console.log(nameInputs);
-
     summInputs.forEach(input => {
         input.addEventListener('input', event => {
             event.target.value = event.target.value.replace (/\D/, '');
@@ -49,8 +46,6 @@ const checkInput = function() {
         });
     });
 
-
-    
 };
 
 const appData = {
