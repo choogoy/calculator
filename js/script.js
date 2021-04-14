@@ -24,9 +24,33 @@ let additionalExpensesItem = document.querySelector('.additional_expenses-item')
 let expensesItems = document.querySelectorAll('.expenses-items');
 let incomeItems = document.querySelectorAll('.income-items');
 let periodAmount = document.querySelector('.period-amount');
+let inputs = document.querySelectorAll('input');
 
 const isNumber = function(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
+};
+
+const checkInput = function() {
+    const summInputs = document.querySelectorAll('input[placeholder="Сумма"]');
+    const nameInputs = document.querySelectorAll('input[placeholder="Наименование"]');
+
+    console.log(summInputs);
+    console.log(nameInputs);
+
+    summInputs.forEach(input => {
+        input.addEventListener('input', event => {
+            event.target.value = event.target.value.replace (/\D/, '');
+        });
+    });
+
+    nameInputs.forEach(input => {
+        input.addEventListener('input', event => {
+            event.target.value = event.target.value.replace(/[a-zA-Z0-9-]/, '');
+        });
+    });
+
+
+    
 };
 
 const appData = {
@@ -67,7 +91,9 @@ const appData = {
     },
     addExpensesBlock: function() {
         let cloneExpensesItem = expensesItems[0].cloneNode(true);
+        cloneExpensesItem.querySelectorAll('input').forEach(item => item.value = '');
         expensesItems[0].parentNode.insertBefore(cloneExpensesItem, expensesAddBtn);
+        checkInput();
         expensesItems = document.querySelectorAll('.expenses-items');
         if (expensesItems.length === 3) {
             expensesAddBtn.style.display = 'none';
@@ -75,7 +101,9 @@ const appData = {
     },
     addIncomeBlock: function() {
         let cloneIncomeItem = incomeItems[0].cloneNode(true);
+        cloneIncomeItem.querySelectorAll('input').forEach(item => item.value = '');
         incomeItems[0].parentNode.insertBefore(cloneIncomeItem, incomeAddBtn);
+        checkInput();
         incomeItems = document.querySelectorAll('.income-items');
         if (incomeItems.length === 3) {
             incomeAddBtn.style.display = 'none';
@@ -160,6 +188,8 @@ const appData = {
         return appData.budgetMonth * periodSelect.value;
     },
 };
+
+checkInput();
 
 startBtn.addEventListener('click', function() {
     if (!isNumber(salaryAmount.value) || salaryAmount.value <= 0) {
