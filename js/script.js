@@ -84,7 +84,30 @@ const appData = {
         this.budgetDay = 0;
         this.budgetMonth = 0;
         this.expensesMonth = 0;
+
+        document.querySelectorAll('.data input').forEach (input => input.removeAttribute("disabled"));
+        document.querySelectorAll('input').forEach (input => input.value = '');
+        startBtn.style.display = 'block';
+        cancelBtn.style.display = 'none';
+        incomeAddBtn.style.display = 'block';
+        expensesAddBtn.style.display = 'block';
+        this.clearIncome();
+        this.clearExpenses();
         this.start();
+    },
+    clearIncome: function() {
+        document.querySelectorAll('.income-items').forEach((item, index) => {
+           if (index !== 0) {
+            item.remove();
+           }
+        });
+    },
+    clearExpenses: function() {
+        document.querySelectorAll('.expenses-items').forEach((item, index) => {
+            if (index !== 0) {
+             item.remove();
+            }
+         });
     },
     showResult: function() {
         budgetMonthValue.value = this.budgetMonth;
@@ -209,12 +232,7 @@ startBtn.addEventListener('click', function() {
 });
 
 cancelBtn.addEventListener('click', function() {
-    document.querySelectorAll('.data input').forEach (input => input.removeAttribute("disabled"));
-    document.querySelectorAll('input').forEach (input => input.value = '');
-    startBtn.style.display = 'block';
-    cancelBtn.style.display = 'none';
     appData.reset();
-    appData.start();
 });
 
 expensesAddBtn.addEventListener('click', appData.addExpensesBlock);
