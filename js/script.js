@@ -98,7 +98,7 @@ const appData = {
     clearIncome: function() {
         document.querySelectorAll('.income-items').forEach((item, index) => {
            if (index !== 0) {
-            item.remove();
+                item.remove();
            }
         });
     },
