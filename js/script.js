@@ -79,8 +79,7 @@ class AppData {
     
         this.getExpInc();
         this.getExpensesMonth();
-        this.getAddExpenses();
-        this.getAddIncome();
+        this.getAddExpInc();
         this.getBudget();
         this.getInfoDeposit();
         this.getStatusIncome();
@@ -128,22 +127,40 @@ class AppData {
             this.incomeMonth += +this.income[key];
         }
     }
-    getAddExpenses() {
+    // getAddExpenses() {
+    //     let addExpenses = additionalExpensesItem.value.split(',');
+    //     addExpenses.forEach(item => {
+    //         item = item.trim();
+    //         if (item !== '') {
+    //             this.addExpenses.push(item);
+    //         }
+    //     });
+    // }
+    // getAddIncome() {
+    //     additionalIncomeItem.forEach(item => {
+    //         let itemValue = item.value.trim();
+    //         if (itemValue !== '') {
+    //             this.addIncome.push(itemValue);
+    //         }
+    //     });
+    // }
+    getAddExpInc() {
         let addExpenses = additionalExpensesItem.value.split(',');
-        addExpenses.forEach(item => {
-            item = item.trim();
-            if (item !== '') {
-                this.addExpenses.push(item);
-            }
-        });
-    }
-    getAddIncome() {
-        additionalIncomeItem.forEach(item => {
-            let itemValue = item.value.trim();
-            if (itemValue !== '') {
-                this.addIncome.push(itemValue);
-            }
-        });
+        let incomeArray = [];
+        additionalIncomeItem.forEach(item => incomeArray.push(item.value));
+
+        const pushArr = (array, resultArray) => {
+            array.forEach(item => {
+                item = item.trim();
+                if (item !== '') {
+                    resultArray.push(item);
+                }
+            });
+            console.log(this);
+        };
+
+        pushArr(addExpenses, this.addExpenses);
+        pushArr(incomeArray, this.addIncome);
     }
     getExpensesMonth() { // метод вычисляет сумму всех обязательных расходов за месяц
         for (let key in this.expenses) {
