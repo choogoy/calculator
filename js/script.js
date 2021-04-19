@@ -97,27 +97,21 @@ class AppData {
         
         periodSelect.addEventListener('input', () => incomePeriodValue.value = this.calcPeriod());
     }
-    addExpensesBlock() {
-        let cloneExpensesItem = expensesItems[0].cloneNode(true);
-        cloneExpensesItem.querySelectorAll('input').forEach(item => item.value = '');
-        expensesItems[0].parentNode.insertBefore(cloneExpensesItem, expensesAddBtn);
+    addExpIncBlock() {
+        const selector = this.className.split(' ')[1].split('_')[0];
+        const items = document.getElementsByClassName(`${selector}-items`);
+        let cloneItem = items[0].cloneNode(true); 
+        cloneItem.querySelectorAll('input').forEach(item => item.value = '');
+        items[0].parentNode.insertBefore(cloneItem, this);
         checkInput();
-        expensesItems = document.querySelectorAll('.expenses-items');
-        if (expensesItems.length === 3) {
-            expensesAddBtn.style.display = 'none';
-        }
-    } 
-    addIncomeBlock() {
-        let cloneIncomeItem = incomeItems[0].cloneNode(true);
-        cloneIncomeItem.querySelectorAll('input').forEach(item => item.value = '');
-        incomeItems[0].parentNode.insertBefore(cloneIncomeItem, incomeAddBtn);
-        checkInput();
-        incomeItems = document.querySelectorAll('.income-items');
-        if (incomeItems.length === 3) {
-            incomeAddBtn.style.display = 'none';
+        if (items.length === 3) {
+            this.style.display = 'none';
         }
     }
     getExpInc() {
+        incomeItems = document.querySelectorAll('.income-items');
+        expensesItems = document.querySelectorAll('.expenses-items');
+
         const count = item => {
             const startStr = item.className.split('-')[0];
             const itemTitle = item.querySelector(`.${startStr}-title`).value;
@@ -192,6 +186,9 @@ class AppData {
         const inputTextData = document.querySelectorAll('.data input[type=text]');
         const resultInputAll = document.querySelectorAll('.result input[type=text]');
     
+        incomeItems = document.querySelectorAll('.income-items');
+        expensesItems = document.querySelectorAll('.expenses-items');
+
         inputTextData.forEach(elem => {
             elem.value = '';
             elem.removeAttribute("disabled");
@@ -232,8 +229,8 @@ class AppData {
     }
     eventsListeners() {
         startBtn.addEventListener('click', this.start.bind(this));
-        expensesAddBtn.addEventListener('click', this.addExpensesBlock);
-        incomeAddBtn.addEventListener('click', this.addIncomeBlock);
+        expensesAddBtn.addEventListener('click', this.addExpIncBlock);
+        incomeAddBtn.addEventListener('click', this.addExpIncBlock);
         salaryAmount.addEventListener('keyup', this.check);
         cancelBtn.addEventListener('click', this.reset.bind(this));  
         periodSelect.addEventListener('input', () => periodAmount.innerHTML = periodSelect.value);
