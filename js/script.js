@@ -127,27 +127,9 @@ class AppData {
             this.incomeMonth += +this.income[key];
         }
     }
-    // getAddExpenses() {
-    //     let addExpenses = additionalExpensesItem.value.split(',');
-    //     addExpenses.forEach(item => {
-    //         item = item.trim();
-    //         if (item !== '') {
-    //             this.addExpenses.push(item);
-    //         }
-    //     });
-    // }
-    // getAddIncome() {
-    //     additionalIncomeItem.forEach(item => {
-    //         let itemValue = item.value.trim();
-    //         if (itemValue !== '') {
-    //             this.addIncome.push(itemValue);
-    //         }
-    //     });
-    // }
     getAddExpInc() {
-        let addExpenses = additionalExpensesItem.value.split(',');
-        let incomeArray = [];
-        additionalIncomeItem.forEach(item => incomeArray.push(item.value));
+        const addExpenses = additionalExpensesItem.value.split(',');
+        const incomeArray = [];
 
         const pushArr = (array, resultArray) => {
             array.forEach(item => {
@@ -156,8 +138,9 @@ class AppData {
                     resultArray.push(item);
                 }
             });
-            console.log(this);
         };
+        
+        additionalIncomeItem.forEach(item => incomeArray.push(item.value));
 
         pushArr(addExpenses, this.addExpenses);
         pushArr(incomeArray, this.addIncome);
