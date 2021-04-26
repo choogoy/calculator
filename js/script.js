@@ -46,6 +46,112 @@ const checkInput = () => {
 
 };
 
+// записываем куку
+const setCookie = (name, value, options = {}) => {
+
+    options = {
+      path: '/',
+      // при необходимости добавьте другие значения по умолчанию
+      ...options
+    };
+  
+    if (options.expires instanceof Date) {
+      options.expires = options.expires.toUTCString();
+    }
+  
+    let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+  
+    for (let optionKey in options) {
+      updatedCookie += "; " + optionKey;
+      let optionValue = options[optionKey];
+      if (optionValue !== true) {
+        updatedCookie += "=" + optionValue;
+      }
+    }
+  
+    document.cookie = updatedCookie;
+};
+
+// считываем куку
+const getCookie = name => {
+    let matches = document.cookie.match(new RegExp(
+        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+};
+
+// удаляем куку
+const deleteCookie = name => {
+    setCookie(name, "", {
+      'max-age': -1
+    });
+};
+
+// считываем localStorage
+const getStorage = () => {
+    const getData = JSON.parse(localStorage.getItem('calc')) || [];
+    return getData;
+};
+
+// выводим на страницу из localStorage
+const showStorage = () => {
+    const data = getStorage();
+
+    if (data.length === undefined) {
+        document.querySelectorAll('.data input[type=text]').forEach(input => input.setAttribute("disabled", true));
+        expensesAddBtn.setAttribute("disabled", true);
+        incomeAddBtn.setAttribute("disabled", true);
+        startBtn.style.display = 'none';
+        cancelBtn.style.display = 'block';
+        additionalExpensesValue.value = data.addExpenses.join(', ') || '';
+        additionalIncomeValue.value = data.addIncome.join(', ') || '';
+    }
+
+    budgetMonthValue.value = data.budgetMonth || 0;
+    budgetDayValue.value = data.budgetDay || 0;
+    expensesMonthValue.value = data.expensesMonth || 0;
+
+};
+
+// записываем в localStorage
+const setStorage = () => localStorage.setItem('calc', JSON.stringify(appData));
+
+// очищаем localStorage
+const clearStorage = () => localStorage.clear('calc');
+
+// создаем куки
+const createCookies = () => {
+    for (let key of Object.keys(appData)) {
+        if (key !== undefined) {
+            setCookie(key, JSON.stringify(appData[key]));
+        }
+    }
+    document.cookie = "isLoad=true"; //  <= зачем эта кука я так и не понял из задания =)
+};
+
+// очищаем куки
+const clearCookies = () => {
+    for (let key of Object.keys(appData)) {
+        deleteCookie(key);
+    }
+    deleteCookie("isLoad");
+    clearInterval(cookieInterval);
+};
+
+// проверяем что все куки на месте иначе сносим все под корень
+const checkCookies = () => {
+    const response = getStorage();
+    
+    for (let key of Object.keys(response)) {
+        if (!getCookie(key)) {
+            clearCookies();
+            clearStorage();
+            appData.reset();
+        }
+    }
+
+};
+
 class AppData {
     constructor() {
         this.budget = 0;
@@ -79,7 +185,6 @@ class AppData {
         cancelBtn.style.display = 'block';
     
         this.budget = +salaryAmount.value;
-    
         this.getExpInc();
         this.getExpensesMonth();
         this.getAddExpInc();
@@ -87,6 +192,8 @@ class AppData {
         this.getBudget();
         this.getStatusIncome();
         this.showResult();
+        setStorage();
+        createCookies();
     }
     showResult() {
         budgetMonthValue.value = this.budgetMonth;
@@ -96,7 +203,6 @@ class AppData {
         additionalIncomeValue.value = this.addIncome.join(', ');
         targetMonthValue.value = Math.ceil(this.getTargetMonth());
         incomePeriodValue.value = this.calcPeriod();
-        
         periodSelect.addEventListener('input', () => incomePeriodValue.value = this.calcPeriod());
     }
     addExpIncBlock() {
@@ -159,7 +265,7 @@ class AppData {
         this.budgetDay = Math.floor(this.budgetMonth / 30);
     }
     getTargetMonth() {
-        return targetAmount.value / this.budgetMonth;
+        return (targetAmount.value / this.budgetMonth) || '0';
     }
     getStatusIncome() { // метод возвращает уровень дохода
         if (this.budgetDay >= 1200) {
@@ -225,8 +331,8 @@ class AppData {
     }
     getInfoDeposit() {
         if (this.deposit) {
-            this.percentDeposit = depositPercent.value;
-            this.moneyDeposit = depositAmount.value;
+            this.percentDeposit = +depositPercent.value;
+            this.moneyDeposit = +depositAmount.value;
         }
     }
     changePercent() {
@@ -267,14 +373,24 @@ class AppData {
         expensesAddBtn.addEventListener('click', this.addExpIncBlock);
         incomeAddBtn.addEventListener('click', this.addExpIncBlock);
         salaryAmount.addEventListener('keyup', this.check);
-        cancelBtn.addEventListener('click', this.reset.bind(this));  
+        cancelBtn.addEventListener('click', () => this.reset(this));  
         periodSelect.addEventListener('input', () => periodAmount.innerHTML = periodSelect.value);
         depositCheck.addEventListener('change', this.depositHandler.bind(this));
 
+        cancelBtn.addEventListener('click', () => {
+            clearStorage();
+            clearCookies();
+        });
+        getStorage(); // получаем данные из localStorage
+        checkCookies(); // проверяем куки
+        showStorage(); // выводим на страницу данные
         checkInput();
     }
 }
 
 const appData = new AppData();
+
+// проверяем каждые 2 секунды наличие всех кук
+let cookieInterval = setInterval(checkCookies, 2000);
 
 appData.eventsListeners();
